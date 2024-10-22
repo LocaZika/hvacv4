@@ -1,0 +1,33 @@
+
+@use '@styles/_extends';
+%bg{
+  @extend %pos-abs;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.container{
+  height: 100%;
+  &.backdrop{
+    @extend %pos-rel;
+    &::after{
+      content: ' ';
+      @extend %bg;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  div{
+    height: 100%;
+  }
+  .slide{
+    width: 100%;
+    @extend %pos-rel;
+    img{
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  
+}
