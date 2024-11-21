@@ -1,12 +1,12 @@
-import Features from "@components/homepage/features/Features";
-import Hero from "@components/homepage/hero/Hero";
-import Services from "@components/homepage/services/Services";
-import Car from "@components/homepage/car/Car";
-import ChooseUs from "@components/homepage/chooseUs/ChooseUs";
-import Cta from "@components/homepage/cta/Cta";
+import Features from "@components/homePage/features/Features";
+import Hero from "@components/homePage/hero/Hero";
+import Services from "@components/homePage/services/Services";
+import Car from "@components/homePage/car/Car";
+import ChooseUs from "@components/homePage/chooseUs/ChooseUs";
+import Cta from "@components/homePage/cta/Cta";
 import { sendRequest } from "@utils/api.utils";
 
-export default async function Home() {
+export default async function homePage() {
   const res = await sendRequest<IBackendResponse<THomepage>>({
     url: "/homepage",
     nextOptions: { cache: 'force-cache' }

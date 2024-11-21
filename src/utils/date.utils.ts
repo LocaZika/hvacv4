@@ -22,9 +22,9 @@ const dayOfWeek = new Map<number, string>([
   [5, 'Friday'],
   [6, 'Saturday'],
 ]);
-const getDay = (): string => date.getDate() < 10 ? `0${date.getDate() + 1}` : date.getDate().toString();
-const getMonth = (): string => date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth().toString();
-type TOption = 'day' | 'month' | 'year' | 'fullDate' | 'fullDatetime' | 'dayOfWeek';
+const getDay = (): string => date.getDate() < 10 ? `0${date.getDate()}` : date.getDate().toString();
+const getMonth = (): string => date.getMonth() < 9 ? `0${date.getMonth() + 1}` : (date.getMonth() + 1).toString();
+type TOption = 'day' | 'month' | 'year' | 'fullDate' | 'dayOfWeek';
 export const getDate = (option: TOption): string | undefined=> {
   if(option){
     switch (option) {

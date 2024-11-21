@@ -1,7 +1,7 @@
 import { Container, Grid } from '@mui/material';
 import heroStyle from './hero.module.scss';
 import Carousel from '@components/carousel/Carousel';
-import HeroTabs  from '@components/homepage/hero/components/tabs/Tabs.hero';
+import HeroTabs  from '@components/homePage/hero/components/tabs/Tabs.hero';
 import Link from 'next/link';
 import { spaceToDash } from '@utils/string.utils';
 

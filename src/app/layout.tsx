@@ -10,12 +10,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Script from "next/script";
 import { sendRequest } from "@utils/api.utils";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
 
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"], display: "swap"});
 
 export const metadata: Metadata = {
   title: { default: "HVAC", template: "%s | HVAC" },
-  description: "HVAC version 3",
+  description: "HVAC",
 };
 
 export default async function RootLayout({
@@ -50,6 +52,12 @@ export default async function RootLayout({
             <Header data={headerData}/>
             {children}
             <Footer data={footerData}/>
+            <ToastContainer
+              transition={Bounce}
+              position="top-right"
+              autoClose={2000}
+              bodyStyle={{fontSize: '1.4rem'}}
+            />
           </ThemeProvider>
         </AppRouterCacheProvider>
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js" />

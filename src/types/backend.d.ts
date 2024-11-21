@@ -27,10 +27,12 @@ declare global {
     transmission?: 'auto' | 'manual';
     mileage?: number;
   }
+
+  type TRequestAboutOptions = 'buy cars' | 'sell cars' | 'wash cars';
   interface ISearchQuery {
     q?: string;
   }
-  interface IQueryParams extends IFilterQuery extends ISearchQuery {
+  interface IQueryParams extends IFilterQuery, ISearchQuery {
     page: number;
     sortBy: 'ascending' | 'descending';
   }

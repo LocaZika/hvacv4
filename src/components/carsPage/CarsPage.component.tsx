@@ -7,10 +7,10 @@ import CarSearchForm from "./carSearchForm/CarSearchForm";
 import CarSortForm from "./carSortForm/CarSortForm";
 import carsPageStyle from "./cars.module.scss";
 import Pagination from "@components/pagination/Pagination";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import queryString from "query-string";
 import { useRouter } from "next/navigation";
-import { removeProperty, removePropertyEmptyValue } from "@utils/object.utils";
+import { carPageInitialState, carsPageReducer, ECarsPageActionKind } from "./carsPage.reducer";
 
 interface ICarsPage {
   carsPageRes: IBackendResponse<TCarspage>;
@@ -18,13 +18,11 @@ interface ICarsPage {
 
 export default function CarsPage({carsPageRes}: ICarsPage) {
   const router = useRouter();
-  const [carsList, setCarsList] = useState<TCarItemMinData[]>([]);
-  const [queryParams, setQueryParams] = useState<IQueryParams>({
-    page: 1,
-    sortBy: "ascending",
-  });
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [filterOptions, setFilterOptions] = useState<IFilterQuery>({});
+  const [{
+    carList,
+    queryParams,
+    totalPages,
+  }, dispatch] = useReducer(carsPageReducer, carPageInitialState);
   const carspage = carsPageRes.data;
   const fetchData = async (): Promise<void> => {
     const res = await fetch(`/api/cars?${queryString.stringify(queryParams)}`, {
@@ -35,29 +33,46 @@ export default function CarsPage({carsPageRes}: ICarsPage) {
     });
     if (res.ok) {
       const result: IBackendResponse<TCarItemMinData[]> = await res.json();
-      setCarsList(result.data);
-      setTotalPages(result.totalPages ?? 1);
+      dispatch({
+        type: ECarsPageActionKind.updateCarList,
+        payload: { carList: result.data } ,
+      });
+      dispatch({
+        type: ECarsPageActionKind.updateTotalPages,
+        payload: { totalPages: result.totalPages }
+      });
     }
   };
   const handleSortByChange = (sortBy: TSortBy): void => {
-    setQueryParams({...queryParams, sortBy });
+    dispatch({
+      type: ECarsPageActionKind.updateQueryParams,
+      payload: { queryParams: { ...queryParams, sortBy } }
+    });
   };
   const handlePageChange = (page: number): void => {
-    setQueryParams({...queryParams, page });
+    dispatch({
+      type: ECarsPageActionKind.updateQueryParams,
+      payload: { queryParams: {...queryParams, page } }
+    });
   };
   const handleSearch = (searchQuery: string): void => {
-    const newQueryObj = removeProperty<IQueryParams>(queryParams, Object.keys(filterOptions));
-    const searchQueryObj = {...newQueryObj, q: searchQuery};
-    setQueryParams(searchQueryObj);
+    dispatch({
+      type: ECarsPageActionKind.updateSearchQuery,
+      payload: { searchQuery },
+    });
   }
   const handleFilter = (filterOptions: IFilterQuery): void => {
-    const queryObj = {...queryParams, ...filterOptions};
-    let filterQueryObj = removeProperty<IQueryParams>(queryObj, ['q']);
-    filterQueryObj = removePropertyEmptyValue<IQueryParams>(filterQueryObj);
-    setFilterOptions(filterQueryObj);
-    setQueryParams(filterQueryObj);
+    dispatch({
+      type: ECarsPageActionKind.updateFilterOptions,
+      payload: { filterOptions },
+    });
   }
-  console.log('>>Query params: ', queryParams);
+  const handleClearFilterOptions = () => {
+    dispatch({
+      type: ECarsPageActionKind.clearFilterOptions,
+      payload: {},
+    });
+  };
   useEffect(() => {
     router.replace(`/cars?${queryString.stringify(queryParams)}`);
     fetchData();
@@ -69,7 +84,7 @@ export default function CarsPage({carsPageRes}: ICarsPage) {
           <Grid item xs={12} lg={3} paddingX={'1.5rem'}>
             <div className={carsPageStyle['sidebar']}>
               <CarSearchForm handleSearch={handleSearch} />
-              <CarFilterForm data={carspage.filterForm} handleFilter={handleFilter} />
+              <CarFilterForm data={carspage.filterForm} handleFilter={handleFilter} handleClearFilterOptions={handleClearFilterOptions} />
             </div>
           </Grid>
           <Grid item xs={12} lg={9} paddingX={'1.5rem'}>
@@ -77,7 +92,7 @@ export default function CarsPage({carsPageRes}: ICarsPage) {
               <CarSortForm handleSortByChange={handleSortByChange} />
             </div>
             <div className={carsPageStyle['cars']}>
-              <CarList data={carsList} />
+              <CarList data={carList} />
             </div>
             <div className={carsPageStyle['pagination']}>
               <Pagination totalPages={totalPages} handlePageChange={handlePageChange} />

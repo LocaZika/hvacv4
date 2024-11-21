@@ -12,14 +12,15 @@ interface ISelect {
   classes?: Partial<SelectClasses>;
   className?: string;
   style?: CSSProperties;
-  handleFilterOption: (filterOption: any) => void;
-  filterOptions?: IFilterQuery | any;
+  handleChange?: (value: any) => void;
 }
-export default function Select({label, values, name, hideLabel, classes, style, className, handleFilterOption, filterOptions}: ISelect) {
+export default function Select({label, values, name, hideLabel, classes, style, className, handleChange}: ISelect) {
   const [value, setValue] = useState<string>('');
-  const handleChange = (e: SelectChangeEvent): void => {
+  const handleSelectChange = (e: SelectChangeEvent): void => {
     setValue(e.target.value);
-    handleFilterOption({...filterOptions, [name]: e.target.value});
+    if ( handleChange ) {
+      handleChange(e.target.value);
+    }
   }
   return (
     <div className={selectStyle['container']}>
@@ -35,7 +36,7 @@ export default function Select({label, values, name, hideLabel, classes, style, 
           labelId={!hideLabel ? `${spaceToDash(label)}-label` : undefined}
           value={value}
           label={!hideLabel ? label : null}
-          onChange={handleChange}
+          onChange={handleSelectChange}
           displayEmpty={hideLabel ?? false}
           name={name}
           sx={{fontSize: '1.4rem'}}
@@ -44,7 +45,7 @@ export default function Select({label, values, name, hideLabel, classes, style, 
           className={className ?? undefined}
         >
           <MenuItem
-            value=""
+            value={""}
             sx={{
               fontSize: '1.4rem',
               minHeight: '4rem',

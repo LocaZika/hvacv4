@@ -1,3 +1,25 @@
+/***Response***/
+type TImg = {
+  id: number,
+  path: string;
+};
+type TCarItem = TCarItemMinData & {
+  brand: string,
+  fuelType: string,
+  type: string,
+  detailImgs: TImg[],
+};
+type TCarItemDetail = {
+  name: string,
+  vin: string,
+  stock: string
+  price: number,
+  discount: number,
+  tradeType: string,
+  imgs: TImg[],
+  detailImgs: TImg[],
+};
+/***Response***/
 /***LAYOUT***/
   /**HEADER**/
   type TSchedule = string;
@@ -147,12 +169,6 @@ type THomepage = {
 };
 /***HOMEPAGE***/
 /***CARPAGE***/
-type TCarItem = TCarItemMinData & {
-  brand: string,
-  fuelType: string,
-  type: string,
-  detailImgs: TImg[],
-};
 type TCarFilterFormItem = {
   id: number,
   name: string,
@@ -221,10 +237,7 @@ type TCarspage = {
     name: string,
     value: number,
   };
-  type TQuantities = {
-    id: number,
-    items: TQuantityItem[],
-  };
+  type TQuantities = TQuantityItem[];
   /**Clients**/
   type TClientItem = {
     id: number,

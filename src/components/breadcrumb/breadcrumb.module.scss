@@ -5,7 +5,7 @@
   background-image: url('/imgs/breadcrumb-bg.jpg');
   .text{
     @extend %text-cap;
-    h2{
+    h1{
       color: $clr-white;
       font-weight: 700;
       font-size: 4.6rem;

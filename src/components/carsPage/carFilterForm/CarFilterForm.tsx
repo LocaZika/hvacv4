@@ -3,7 +3,12 @@ import Select from '@components/select/Select';
 import carFilterStyle from './carfilterForm.module.scss';
 import { FormEvent, useState } from 'react';
 
-export default function CarFilterForm({data, handleFilter}: {data: TCarFilterForm, handleFilter: (filterOptions: IFilterQuery) => void}) {
+interface ICarFilterForm {
+  data: TCarFilterForm;
+  handleFilter: (filterOptions: IFilterQuery) => void;
+  handleClearFilterOptions: () => void;
+}
+export default function CarFilterForm({data, handleFilter, handleClearFilterOptions}: ICarFilterForm) {
   const [filterOptions, setFilterOptions] = useState<IFilterQuery>({});
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -12,6 +17,7 @@ export default function CarFilterForm({data, handleFilter}: {data: TCarFilterFor
   const handleResetFilter = (e: FormEvent) => {
     e.preventDefault();
     setFilterOptions({});
+    handleClearFilterOptions();
     handleFilter({});
   }
   return (
